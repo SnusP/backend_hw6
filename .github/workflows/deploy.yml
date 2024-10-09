@@ -18,13 +18,13 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan 83.166.234.234 >> ~/.ssh/known_hosts
+        ssh-keyscan 83.166.232.81 >> ~/.ssh/known_hosts
 
     - name: Creating .env
       run: |
-        ssh -i ~/.ssh/id_rsa ubuntu@83.166.234.234 "mkdir -p /home/ubuntu/backend_hw6/house/.env && echo '${{ secrets.MARKET_ENV }}' > /home/ubuntu/backend_hw6/house/.env"
-        ssh -i ~/.ssh/id_rsa ubuntu@83.166.234.234 "mkdir -p /home/ubuntu/backend_hw6/auth/.env && echo '${{ secrets.AUTH_ENV }}' > /home/ubuntu/backend_hw6/auth/.env"
+        ssh -i ~/.ssh/id_rsa ubuntu@83.166.232.81 "mkdir -p /home/ubuntu/backend_hw6/house/.env && echo '${{ secrets.MARKET_ENV }}' > /home/ubuntu/backend_hw6/house/.env"
+        ssh -i ~/.ssh/id_rsa ubuntu@83.166.232.81 "mkdir -p /home/ubuntu/backend_hw6/auth/.env && echo '${{ secrets.AUTH_ENV }}' > /home/ubuntu/backend_hw6/auth/.env"
         
     - name: Deploying
       run: |
-        ssh -i ~/.ssh/id_rsa ubuntu@83.166.234.234 "cd /home/ubuntu/backend_hw6 && git pull origin main && sudo docker-compose up --build -d"
+        ssh -i ~/.ssh/id_rsa ubuntu@83.166.232.81 "cd /home/ubuntu/backend_hw6 && git pull origin main && sudo docker-compose up --build -d"
