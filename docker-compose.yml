@@ -1,0 +1,65 @@
+services:
+  service-db:
+    container_name: service-db
+    image: postgres:14
+    environment:
+      POSTGRES_DB: back_4
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1122
+
+    expose:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - app-network
+
+  service-house:
+    container_name: service-house
+    build:
+      context: ./house
+    restart: always
+    expose:
+      - 4000
+    env_file:
+      - ./house/.env
+    networks:
+      - app-network
+    depends_on:
+      - service-db
+
+  service-auth:
+    container_name: service-auth
+    build:
+      context: ./auth
+    restart: always
+    expose:
+      - 3000
+    env_file:
+      - ./auth/.env
+    networks:
+      - app-network
+    depends_on:
+      - service-db
+
+  gateway:
+    container_name: gateway
+    build:
+      context: ./gateway
+    restart: always
+    ports:
+      - 2000:2000
+    depends_on:
+      - service-auth
+      - service-house
+      - service-db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
